@@ -1,0 +1,3 @@
+#!/bin/bash
+ipset restore </etc/ngfw/ipv4cn.ipset
+iptables -A OUTPUT -m set --match-set cnip dst -j DROP

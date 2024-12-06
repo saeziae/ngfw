@@ -1,0 +1,16 @@
+#!/bin/bash
+IPV4SOURCE="https://raw.githubusercontent.com/wyot1/GeoLite2-Unwalled/downloads/COUNTRY/CSV/GeoLite2-Country-Blocks-IPv4.csv"
+CONF="/etc/ngfw"
+CNID="1814991"
+
+curl $IPV4SOURCE >"$CONF/ipv4.csv"
+
+echo "create cnip hash:net" >"$CONF/ipv4cn.ipset"
+python - >>"$CONF/ipv4cn.ipset" <<RAMEN
+import csv
+with open("$CONF/ipv4.csv", 'r') as file:
+    csv_reader = csv.reader(file)
+    for row in csv_reader:
+        if len(row) >= 3 and row[2] == "$CNID":
+            print("add cnip "+row[0])
+RAMEN

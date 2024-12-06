@@ -1,0 +1,3 @@
+#!/bin/bash
+iptables -D OUTPUT -m set --match-set cnip dst -j DROP
+ipset destroy cnip
